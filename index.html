@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Organ Donation & Matching Platform</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f6f8;
+    }
+    header {
+      background: #b71c1c;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    section {
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #b71c1c;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+    }
+    button {
+      background: #b71c1c;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #8e0000;
+    }
+    footer {
+      text-align: center;
+      padding: 10px;
+      background: #222;
+      color: white;
+    }
+    .match {
+      background: #e8f5e9;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Organ Donation & Recipient Matching System</h1>
+  <p>Connecting donors, recipients & hospitals faster</p>
+</header>
+
+<section>
+  <div class="card">
+    <h2>Register Donor</h2>
+    <input id="dName" placeholder="Donor Name" />
+    <input id="dBlood" placeholder="Blood Group (A+, O-)" />
+    <input id="dOrgan" placeholder="Organ to Donate" />
+    <input id="dHospital" placeholder="Hospital Name" />
+    <button onclick="addDonor()">Add Donor</button>
+  </div>
+
+  <div class="card">
+    <h2>Register Recipient</h2>
+    <input id="rName" placeholder="Recipient Name" />
+    <input id="rBlood" placeholder="Blood Group" />
+    <input id="rOrgan" placeholder="Organ Needed" />
+    <select id="rUrgency">
+      <option value="">Urgency Level</option>
+      <option value="1">Low</option>
+      <option value="5">Medium</option>
+      <option value="10">High</option>
+    </select>
+    <button onclick="matchOrgan()">Find Match</button>
+    <div id="result"></div>
+  </div>
+
+  <div class="card">
+    <h2>Chatbot Assistant</h2>
+    <input id="question" placeholder="Ask about organ donation..." />
+    <button onclick="askBot()">Ask</button>
+    <p id="botReply"></p>
+  </div>
+</section>
+
+<footer>
+  <p>This platform assists coordination only. No medical decisions are made.</p>
+</footer>
+
+<script>
+  let donors = [];
+
+  function addDonor() {
+    donors.push({
+      name: dName.value,
+      blood: dBlood.value,
+      organ: dOrgan.value,
+      hospital: dHospital.value
+    });
+    alert("Donor Registered Successfully");
+    dName.value = dBlood.value = dOrgan.value = dHospital.value = "";
+  }
+
+  function matchOrgan() {
+    const match = donors.find(d =>
+      d.blood === rBlood.value && d.organ.toLowerCase() === rOrgan.value.toLowerCase()
+    );
+
+    if (match) {
+      result.innerHTML = `<div class='match'>\n        <strong>Match Found!</strong><br>
+        Donor: ${match.name}<br>
+        Hospital: ${match.hospital}
+      </div>`;
+    } else {
+      result.innerHTML = "<p>No match found. Added to waiting list.</p>";
+    }
+  }
+
+  function askBot() {
+    const q = question.value.toLowerCase();
+    let reply = "Please contact the hospital coordinator.";
+
+    if (q.includes("donate")) reply = "Organ donation saves lives and requires family consent.";
+    if (q.includes("wait")) reply = "Waiting time depends on compatibility and urgency.";
+    if (q.includes("urgency")) reply = "High urgency patients are prioritized.";
+
+    botReply.innerText = reply;
+    question.value = "";
+  }
+</script>
+
+</body>
+</html>
